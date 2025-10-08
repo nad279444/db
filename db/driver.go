@@ -123,6 +123,27 @@ func (d *Driver) ReadAll(collection string) ([]string, error) {
 	return records, nil
 }
 
+// Update  an existing record in the database
+func (d *Driver) Update(collection string, resource string, v any) error {
+	if collection == "" {
+		return fmt.Errorf("collection name is required")
+	}
+	if resource == "" {
+		return fmt.Errorf("resource key is required")
+	}
+
+	recordPath := filepath.Join(d.dir, collection, resource+".json")
+
+	// Check if the record exists before updating
+	if _, err := os.Stat(recordPath); os.IsNotExist(err) {
+		return fmt.Errorf("record '%s' not found in collection '%s'", resource, collection)
+	}
+
+	// Reuse the Write method to overwrite the record
+	return d.Write(collection, resource, v)
+}
+
+
 // Delete a record or collection
 func (d *Driver) Delete(collection, resource string) error {
 	path := filepath.Join(collection, resource)

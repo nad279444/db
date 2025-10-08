@@ -27,6 +27,26 @@ func main() {
 		}
 	}
 
+	// ✅ Update example
+	updatedUser := models.User{
+		Name:    "Sammy",
+		Age:     "23",
+		Contact: "23344333",
+		Company: "Hubtel",
+		Address: models.Address{
+			City:    "Accra",
+			State:   "Airport",
+			Country: "Ghana",
+			PinCode: "410013",
+		},
+	}
+
+	if err := database.Update("users", "Kwame", updatedUser); err != nil {
+		fmt.Println("Error updating user:", err)
+	} else {
+		fmt.Println("User Kwame updated successfully!")
+	}
+
 	records, err := database.ReadAll("users")
 	if err != nil {
 		fmt.Println("Error reading records:", err)
